@@ -13,6 +13,8 @@
         .status-badge { font-size: 0.8rem; padding: 5px 10px; border-radius: 20px; }
         .status-ongoing { background-color: #e3f2fd; color: #0d6efd; }
         .status-complete { background-color: #e9ecef; color: #495057; }
+        .filter-btn-group .btn { border-radius: 20px; margin-right: 8px; }
+        .filter-btn-group .active { background-color: #0d6efd; color: white; border-color: #0d6efd; }
     </style>
 </head>
 <body>
@@ -24,7 +26,50 @@
                 <a href="/posts/insertForm" class="btn btn-primary">✏️ 글쓰기</a>
             </div>
         </div>
-
+		
+		<!-- 1. 검색 및 필터링 폼 -->
+        <form action="/posts/list" method="get" class="mb-4 bg-white p-3 rounded shadow-sm">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-3">
+                    <!-- 1-1. 카테고리 필터 -->
+                    <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="ALL" ${currentCategory == 'ALL' ? 'selected' : ''}>전체 카테고리</option>
+                        <option value="전자기기" ${currentCategory == '전자기기' ? 'selected' : ''}>💻 전자기기</option>
+                        <option value="지갑/카드" ${currentCategory == '지갑/카드' ? 'selected' : ''}>💳 지갑/카드</option>
+                        <option value="의류" ${currentCategory == '의류' ? 'selected' : ''}>👕 의류</option>
+                        <option value="도서" ${currentCategory == '도서' ? 'selected' : ''}>📚 도서</option>
+                        <option value="기타" ${currentCategory == '기타' ? 'selected' : ''}>기타</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-5">
+                    <!-- 1-2. 키워드 검색창 -->
+                    <input type="text" name="keyword" class="form-control form-control-sm" placeholder="제목, 내용, 장소 검색" value="${currentKeyword}">
+                </div>
+                
+                <div class="col-md-4 text-end">
+                    <button type="submit" class="btn btn-dark btn-sm me-2">검색</button>
+                    <a href="/posts/list" class="btn btn-light btn-sm border">초기화</a>
+                </div>
+            </div>
+        </form>
+        
+        <!-- 2. 유형 필터 버튼 그룹 -->
+        <div class="d-flex mb-3 filter-btn-group">
+            <a href="/posts/list?keyword=${currentKeyword}&category=${currentCategory}&type=ALL" 
+               class="btn btn-outline-primary btn-sm ${currentType == 'ALL' ? 'active' : ''}">
+                전체 (${currentType == 'ALL' ? posts.size() : ''})
+            </a>
+            <a href="/posts/list?keyword=${currentKeyword}&category=${currentCategory}&type=FOUND" 
+               class="btn btn-outline-primary btn-sm ${currentType == 'FOUND' ? 'active' : ''}">
+                주웠어요 (습득)
+            </a>
+            <a href="/posts/list?keyword=${currentKeyword}&category=${currentCategory}&type=LOST" 
+               class="btn btn-outline-primary btn-sm ${currentType == 'LOST' ? 'active' : ''}">
+                잃어버렸어요 (분실)
+            </a>
+        </div>
+        
         <div class="card shadow-sm border-0">
             <div class="card-body p-0">
                 <table class="table table-hover table-custom mb-0 text-center">

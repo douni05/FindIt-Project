@@ -5,15 +5,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FindIt - 교내 분실물 센터</title>
+    <title>파인드잇 - FindIt</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8f9fa; }
+        
+        /* 네비게이션 바 스타일 */
+        .navbar { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 15px 0; }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: #667eea !important; }
+        .nav-btn { border-radius: 20px; font-weight: 500; padding: 8px 20px; }
+
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 80px 0 100px;
+            padding: 100px 0 120px; /* 상단 여백 조정 */
             border-radius: 0 0 40px 40px;
             margin-bottom: 50px;
         }
@@ -38,8 +44,47 @@
 </head>
 <body>
 
-    <div class="hero text-center">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
+            <a class="navbar-brand" href="/">🎒 FindIt</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
+                    <c:if test="${empty user}">
+                        <li class="nav-item">
+                            <a href="/users/loginForm" class="btn btn-outline-primary nav-btn">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/users/insertForm" class="btn btn-primary nav-btn text-white">회원가입</a>
+                        </li>
+                    </c:if>
+
+                    <c:if test="${not empty user}">
+                        <li class="nav-item me-3 text-muted">
+                            반갑습니다, <strong>${user.name}</strong>님!
+                        </li>
+                        <c:if test="${user.role == 'ADMIN'}">
+                            <li class="nav-item">
+                                <a href="/admin" class="btn btn-danger nav-btn btn-sm">👑 관리자</a>
+                            </li>
+                        </c:if>
+                        <li class="nav-item">
+                            <a href="/users/myPage" class="btn btn-light nav-btn border">👤 마이페이지</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/users/logout" class="btn btn-outline-secondary nav-btn">로그아웃</a>
+                        </li>
+                    </c:if>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero text-center mt-5"> <div class="container pt-4">
             <h1 class="display-5 fw-bold mb-3">교내 분실물 센터 FindIt</h1>
             <p class="fs-5 mb-5 opacity-75">잃어버린 물건, 이제 헤매지 말고 학교 안에서 찾으세요.</p>
             
@@ -54,16 +99,10 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center gap-3">
-                <c:if test="${empty user}">
-                    <a href="/users/loginForm" class="btn btn-light btn-lg px-4 fw-bold">로그인</a>
-                    <a href="/users/insertForm" class="btn btn-outline-light btn-lg px-4">회원가입</a>
-                </c:if>
-                <c:if test="${not empty user}">
-                    <span class="align-self-center me-3 fs-5">반갑습니다, <strong>${user.name}</strong>님! 👋</span>
-                    <a href="/posts/list" class="btn btn-light btn-lg px-4 fw-bold">게시판 입장</a>
-                    <a href="/users/logout" class="btn btn-outline-light btn-lg px-4">로그아웃</a>
-                </c:if>
+            <div class="d-flex justify-content-center">
+                <a href="/posts/list" class="btn btn-light btn-lg px-5 fw-bold shadow text-primary rounded-pill">
+                    🔍 분실물 게시판 바로가기
+                </a>
             </div>
         </div>
     </div>
@@ -75,44 +114,44 @@
         </div>
         
         <div class="row g-4">
-	    <c:choose>
-	        <c:when test="${not empty recentPosts}">
-	            <c:forEach var="post" items="${recentPosts}">
-	                <div class="col-md-3">
-	                    <div class="card card-custom h-100">
-	                        
-	                        <div style="height: 200px; overflow: hidden; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
-	                            <c:choose>
-	                                <c:when test="${not empty post.images}">
-	                                    <img src="/images/${post.images[0].saveName}" alt="물품 사진" style="width: 100%; height: 100%; object-fit: cover;">
-	                                </c:when>
-	                                <c:otherwise>
-	                                    <span class="fs-1 text-muted">📸</span>
-	                                </c:otherwise>
-	                            </c:choose>
-	                        </div>
-	
-	                        <div class="card-body">
-	                            <span class="badge ${post.type == 'LOST' ? 'badge-lost' : 'badge-found'} mb-2">
-	                                ${post.type == 'LOST' ? '분실' : '습득'}
-	                            </span>
-	                            <h5 class="card-title text-truncate">${post.title}</h5>
-	                            <p class="card-text small text-muted">📍 ${post.building}</p>
-	                        </div>
-	                        <div class="card-footer bg-white border-0 pb-3">
-	                            <a href="/posts/detail/${post.postId}" class="btn btn-sm btn-outline-primary w-100">상세보기</a>
-	                        </div>
-	                    </div>
-	                </div>
-	            </c:forEach>
-	        </c:when>
-	        <c:otherwise>
-	            <div class="col-12 text-center py-5 text-muted bg-white rounded-3 shadow-sm">
-	                <p class="mb-0">아직 최근 게시물이 없습니다.</p>
-	            </div>
-	        </c:otherwise>
-	    </c:choose>
-	</div>
+            <c:choose>
+                <c:when test="${not empty recentPosts}">
+                    <c:forEach var="post" items="${recentPosts}">
+                        <div class="col-md-3">
+                            <div class="card card-custom h-100">
+                                
+                                <div style="height: 200px; overflow: hidden; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                                    <c:choose>
+                                        <c:when test="${not empty post.images}">
+                                            <img src="/images/${post.images[0].saveName}" alt="물품 사진" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="fs-1 text-muted">📸</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+
+                                <div class="card-body">
+                                    <span class="badge ${post.type == 'LOST' ? 'badge-lost' : 'badge-found'} mb-2">
+                                        ${post.type == 'LOST' ? '분실' : '습득'}
+                                    </span>
+                                    <h5 class="card-title text-truncate">${post.title}</h5>
+                                    <p class="card-text small text-muted">📍 ${post.building}</p>
+                                </div>
+                                <div class="card-footer bg-white border-0 pb-3">
+                                    <a href="/posts/detail/${post.postId}" class="btn btn-sm btn-outline-primary w-100">상세보기</a>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <div class="col-12 text-center py-5 text-muted bg-white rounded-3 shadow-sm">
+                        <p class="mb-0">아직 최근 게시물이 없습니다.</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </div>
 
     <div class="container pb-5">
@@ -156,5 +195,6 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -29,21 +29,31 @@ public class PostController {
     private final CommentService commentService;
     private final PostImageRepository postImageRepository;
     private final CommentRepository commentRepository;
-	private RedirectAttributes redirectAttributes;
+    
+    // [중요 수정 1] 여기에 있던 private RedirectAttributes ... 코드는 삭제했습니다! (여기 있으면 안 됨)
 
-    // 1. 게시글 목록 조회
-    @GetMapping("/list")
-    public String list(Model model) {
-        // PDF 스타일: selectAll() 호출
-        List<Post> list = postService.selectAll();
-        model.addAttribute("posts", list);
+    // 1. 게시글 목록 조회 및 검색
+	@GetMapping("/list")
+    public String list(Model model, 
+                       // [중요 수정 2] value="..." 로 이름을 명확하게 지정 (에러 방지)
+                       @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                       @RequestParam(value = "type", defaultValue = "ALL") String type,
+                       @RequestParam(value = "category", defaultValue = "ALL") String category) {
+        
+        List<Post> posts = postService.searchAndFilter(keyword, type, category);
+        
+        model.addAttribute("posts", posts);
+        model.addAttribute("currentKeyword", keyword);
+        model.addAttribute("currentType", type);
+        model.addAttribute("currentCategory", category);
+        
         return "posts/list";
     }
 
     // 2. 글쓰기 폼 이동
     @GetMapping("/insertForm")
-    public String insertForm(HttpServletRequest request) {
-        // 로그인 체크 로직
+    // [중요 수정 3] RedirectAttributes를 파라미터로 받음
+    public String insertForm(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loginUser") == null) {
         	redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
@@ -53,11 +63,11 @@ public class PostController {
     }
 
     // 3. 글쓰기 처리
-    // DTO 없이 Post 엔티티를 직접 사용합니다.
     @PostMapping("/insert")
     public String insert(Post post, 
-                         @RequestParam(value="imageFiles", required=false) List<MultipartFile> imageFiles,
-                         HttpServletRequest request) throws java.io.IOException {
+                         @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+                         HttpServletRequest request,
+                         RedirectAttributes redirectAttributes) throws java.io.IOException { // [중요 수정 3] 파라미터 추가
         
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loginUser") == null) {
@@ -66,11 +76,10 @@ public class PostController {
        }
         User loginUser = (User) session.getAttribute("loginUser");
 
-        post.setUser(loginUser);               // 작성자 세팅
-        post.setLostDate(LocalDateTime.now()); // 작성일 세팅
-        post.setStatus("PROCEEDING");          // 상태 세팅
+        post.setUser(loginUser);
+        post.setLostDate(LocalDateTime.now());
+        post.setStatus("PROCEEDING");
 
-        // 서비스의 insert() 호출
         postService.insert(post, imageFiles);
 
         return "redirect:/posts/list";
@@ -80,7 +89,7 @@ public class PostController {
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
         Post post = postService.select(id);
-                List<PostImage> images = postImageRepository.findByPost(post);
+        List<PostImage> images = postImageRepository.findByPost(post);
         List<Comment> comments = commentRepository.findByPostOrderByCreatedAtAsc(post);
 
         model.addAttribute("post", post);
@@ -111,21 +120,19 @@ public class PostController {
         
         commentService.insert(loginUser.getId(), postId, content);
         
-        return "redirect:/posts/detail/" + postId; // 다시 상세 페이지로 돌아가기
+        return "redirect:/posts/detail/" + postId;
     }
     
     // 6. 상태 변경 처리
     @PostMapping("/{postId}/status")
     public String updateStatus(@PathVariable("postId") Long postId, @RequestParam("status") String status, HttpServletRequest request) {
-        // 로그인 체크
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loginUser") == null) {
             return "redirect:/users/login";
         }
 
-        // 서비스 호출
         postService.updateStatus(postId, status);
 
-        return "redirect:/posts/detail/" + postId; // 다시 상세 페이지로
+        return "redirect:/posts/detail/" + postId;
     }
 }
