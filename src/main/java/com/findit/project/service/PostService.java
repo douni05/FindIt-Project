@@ -5,6 +5,8 @@ import com.findit.project.domain.PostImage;
 import com.findit.project.repository.PostRepository;
 import com.findit.project.repository.PostImageRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +25,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
 
-    private final String uploadDir = "C:/findit-images/";
+    @Value("${file.upload-dir}")
+    private String uploadDir;
     
     /**
      * 게시글 저장 (insert)

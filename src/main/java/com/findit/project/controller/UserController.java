@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
     private final UserService userService;
-    private final PostRepository postRepository; 
+    private final PostRepository postRepository;
     
     // 1. 회원가입 페이지 보여주기
     @GetMapping("/insertForm")
