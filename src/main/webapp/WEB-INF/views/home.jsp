@@ -5,21 +5,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>파인드잇 - FindIt</title>
+    <title>파인드잇 - FindIT</title>
+    <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8f9fa; }
         
-        /* 네비게이션 바 스타일 */
-        .navbar { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 15px 0; }
-        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: #667eea !important; }
+        .navbar { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 10px 0 !important; }
+        .navbar-brand { padding: 0 !important; }
+        .navbar-logo { height: 30px; margin-right: 8px; }
         .nav-btn { border-radius: 20px; font-weight: 500; padding: 8px 20px; }
 
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 100px 0 120px; /* 상단 여백 조정 */
+            padding: 100px 0 60px;
             border-radius: 0 0 40px 40px;
             margin-bottom: 50px;
         }
@@ -46,7 +48,10 @@
 
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="/">🎒 FindIt</a>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/FindIt_logo.png" alt="FindIt Logo" class="navbar-logo">
+                <span class="fw-bold text-primary">FindIT</span>
+            </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -76,7 +81,7 @@
                             <a href="/users/myPage" class="btn btn-light nav-btn border">👤 마이페이지</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/users/logout" class="btn btn-outline-secondary nav-btn">로그아웃</a>
+                            <a href="/users/logout" class="btn btn-outline-danger nav-btn">로그아웃</a>
                         </li>
                     </c:if>
                 </ul>
@@ -85,7 +90,10 @@
     </nav>
 
     <div class="hero text-center mt-5"> <div class="container pt-4">
-            <h1 class="display-5 fw-bold mb-3">교내 분실물 센터 FindIt</h1>
+            <h1 class="display-5 fw-bold mb-3 d-flex align-items-center justify-content-center">
+                <img src="/images/FindIt_logo.png" alt="Logo" style="height: 60px; margin-right: 15px;">
+                교내 분실물 센터 FindIT
+            </h1>
             <p class="fs-5 mb-5 opacity-75">잃어버린 물건, 이제 헤매지 말고 학교 안에서 찾으세요.</p>
             
             <div class="row justify-content-center mb-5">

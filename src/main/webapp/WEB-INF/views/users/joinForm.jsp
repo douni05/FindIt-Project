@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>회원가입 - FindIt</title>
+    <title>회원가입 - FindIT</title>
+    <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -24,22 +25,31 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             padding: 40px;
+            background: white;
         }
         .form-label { font-weight: 600; color: #495057; }
         .form-control {
             padding: 12px;
             border-radius: 10px;
-            border: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+            border: 1px solid #eee;
         }
         .form-control:focus {
-            border-color: #0d6efd;
+       		background-color: white;
             box-shadow: 0 0 0 3px rgba(13,110,253,0.1);
+            border-color: #0d6efd;
         }
         .btn-join {
             padding: 12px;
             border-radius: 10px;
             font-weight: bold;
             font-size: 1.1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+        .btn-join:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -49,7 +59,7 @@
         <div class="text-center mb-4">
             <span class="fs-1">📝</span>
             <h3 class="fw-bold mt-2">회원가입</h3>
-            <p class="text-muted small">FindIt 서비스 이용을 위해 정보를 입력해주세요.</p>
+            <p class="text-muted small">FindIT 서비스 이용을 위해 정보를 입력해주세요.</p>
         </div>
 
         <form action="/users/insert" method="post">
@@ -60,7 +70,7 @@
             
             <div class="mb-3">
                 <label class="form-label">비밀번호</label>
-                <input type="password" name="password" class="form-control" placeholder="비밀번호 (4자리 이상)" required>
+                <input type="password" name="password" class="form-control" placeholder="비밀번호를 입혁하세요. (4자리 이상)" required>
             </div>
             
             <div class="row mb-3">
@@ -76,7 +86,7 @@
 
             <div class="d-grid gap-2 mt-4">
                 <button type="submit" class="btn btn-primary btn-join">가입하기</button>
-                <a href="/" class="btn btn-light btn-join text-secondary">취소</a>
+                <a href="/" class="btn btn-light btn-lg text-secondary">취소</a> 
             </div>
         </form>
         
@@ -88,7 +98,6 @@
 
 </body>
 <script>
-        // 컨트롤러에서 보낸 errorMessage가 있으면 alert로 보여줌
         var errorMessage = "${errorMessage}";
         if (errorMessage && errorMessage.trim() !== "") {
             alert(errorMessage);

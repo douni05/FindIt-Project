@@ -4,11 +4,16 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>마이페이지 - FindIt</title>
+    <title>마이페이지 - FindIT</title>
+    <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; font-family: 'Noto Sans KR', sans-serif; }
+        .navbar { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 10px 0 !important; }
+        .navbar-brand { padding: 0 !important; }
+        .navbar-logo { height: 30px; margin-right: 8px; }
+        .nav-btn { border-radius: 20px; font-weight: 500; padding: 8px 20px; }     
         .mypage-header { margin-bottom: 30px; }
         .card-custom { border: none; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); overflow: hidden; }
         .card-header-custom { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-bottom: none; }
@@ -16,16 +21,25 @@
         .list-group-item { border: none; border-bottom: 1px solid #f1f1f1; padding: 15px 20px; transition: background 0.2s; }
         .list-group-item:hover { background-color: #fafafa; }
         .status-badge { font-size: 0.75rem; padding: 5px 10px; border-radius: 20px; }
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none; color: white; transition: opacity 0.3s;
+        }
+        .btn-gradient:hover { opacity: 0.9; color: white; }
     </style>
 </head>
 <body>
     
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-5">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="/">🎒 FindIt</a>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/FindIt_logo.png" alt="FindIt_Logo" class="navbar-logo">
+                <span class="fw-bold text-primary">FindIT</span>
+            </a>
+            
             <div class="d-flex gap-2">
-                <a href="/" class="btn btn-outline-secondary btn-sm">🏠 홈으로</a>
-                <a href="/users/logout" class="btn btn-outline-danger btn-sm">로그아웃</a>
+                <a href="/" class="btn btn-outline-secondary nav-btn">🏠 홈으로</a>
+                <a href="/users/logout" class="btn btn-outline-danger nav-btn">로그아웃</a>
             </div>
         </div>
     </nav>
@@ -49,17 +63,17 @@
                                 <label class="form-label text-muted small fw-bold">이름</label>
                                 <input type="text" name="name" class="form-control" value="${user.name}">
                             </div>
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <label class="form-label text-muted small fw-bold">전화번호</label>
                                 <input type="text" name="phone" class="form-control" value="${user.phone}">
                             </div>
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <label class="form-label text-muted small fw-bold">비밀번호</label>
                                 <button type="button" class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#passwordModal">
                                     🔒 비밀번호 변경하기
                                 </button>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 fw-bold py-2">정보 수정하기</button>
+                            <button type="submit" class="btn btn-gradient w-100 fw-bold py-2">정보 수정하기</button>
                         </form>
                     </div>
                 </div>

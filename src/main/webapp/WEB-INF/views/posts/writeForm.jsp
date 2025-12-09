@@ -3,12 +3,18 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>글쓰기 - FindIt</title>
+    <title>게시글 등록 - FindIT</title>
+    <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; }
         .form-container { max-width: 700px; margin: 50px auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .form-label { font-weight: 600; color: #495057; }
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none; color: white; transition: opacity 0.3s;
+        }
+        .btn-gradient:hover { opacity: 0.9; color: white; }
     </style>
 </head>
 <body>
@@ -46,11 +52,11 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">장소 (건물명)</label>
-                        <input type="text" name="building" class="form-control" placeholder="예) 제1공학관" required>
+                        <input type="text" name="building" class="form-control" placeholder="예) 4호관" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">상세 위치</label>
-                        <input type="text" name="placeDetail" class="form-control" placeholder="예) 304호 강의실 책상 위">
+                        <input type="text" name="placeDetail" class="form-control" placeholder="예) 403호 강의실 책상 위">
                     </div>
                 </div>
 
@@ -66,7 +72,7 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary btn-lg fw-bold">등록하기</button>
+                    <button type="submit" class="btn btn-gradient btn-lg fw-bold">등록하기</button>
                     <a href="/posts/list" class="btn btn-light btn-lg">취소</a>
                 </div>
             </form>

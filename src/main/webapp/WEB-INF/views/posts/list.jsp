@@ -4,7 +4,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>게시판 목록 - FindIt</title>
+    <title>게시판 목록 - FindIT</title>
+    <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; font-family: 'Noto Sans KR', sans-serif; }
@@ -38,7 +39,7 @@
                         <option value="지갑/카드" ${currentCategory == '지갑/카드' ? 'selected' : ''}>💳 지갑/카드</option>
                         <option value="의류" ${currentCategory == '의류' ? 'selected' : ''}>👕 의류</option>
                         <option value="도서" ${currentCategory == '도서' ? 'selected' : ''}>📚 도서</option>
-                        <option value="기타" ${currentCategory == '기타' ? 'selected' : ''}>기타</option>
+                        <option value="기타" ${currentCategory == '기타' ? 'selected' : ''}>🎸 기타</option>
                     </select>
                 </div>
                 

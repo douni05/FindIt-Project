@@ -4,38 +4,51 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>관리자 대시보드 - FindIt</title>
+    <title>관리자 대시보드 - FindIT</title>
+    <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f0f2f5; font-family: 'Noto Sans KR', sans-serif; }
-        .sidebar { background-color: #212529; min-height: 100vh; color: white; }
-        .stat-card { border: none; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        body { background-color: #f8f9fa; font-family: 'Noto Sans KR', sans-serif; }
+        
+        .navbar { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 10px 0 !important; }
+        .navbar-brand { padding: 0 !important; }
+        .navbar-logo { height: 30px; margin-right: 8px; }
+        .nav-btn { border-radius: 20px; font-weight: 500; padding: 8px 20px; }  
+        .stat-card { border: none; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; background: white; }
         .stat-card:hover { transform: translateY(-5px); }
+        
         .nav-tabs .nav-link { border: none; color: #6c757d; font-weight: 600; padding: 12px 20px; }
         .nav-tabs .nav-link.active { color: #0d6efd; border-bottom: 3px solid #0d6efd; background: transparent; }
-        .table-custom th { background-color: #f8f9fa; font-weight: 600; }
+        
+        .table-custom th { background-color: #f1f3f5; font-weight: 600; }
         .table-custom td { vertical-align: middle; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-dark bg-dark px-4 shadow">
-        <span class="navbar-brand mb-0 h1 fw-bold">👑 FindIt 관리자 센터</span>
-        <div class="d-flex gap-2">
-            <span class="text-white align-self-center me-3 small">관리자님, 환영합니다.</span>
-            <a href="/" class="btn btn-outline-light btn-sm">🏠 서비스 홈</a>
-            <a href="/users/logout" class="btn btn-outline-danger btn-sm">로그아웃</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-5">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/FindIt_logo.png" alt="FindIt_Logo" class="navbar-logo">
+                <span class="fw-bold text-primary">FindIT</span>
+                <span class="badge bg-danger ms-2 rounded-pill">Admin</span>
+            </a>
+            
+            <div class="d-flex gap-2">
+                <a href="/" class="btn btn-outline-secondary nav-btn">🏠 서비스 홈</a>
+                <a href="/users/logout" class="btn btn-outline-danger nav-btn">로그아웃</a>
+            </div>
         </div>
     </nav>
 
-    <div class="container py-5">
+    <div class="container">
         
         <div class="row g-4 mb-5">
             <div class="col-md-4">
                 <div class="card stat-card h-100 border-start border-4 border-primary">
                     <div class="card-body p-4">
-                        <div class="text-muted fw-bold small text-uppercase mb-2">Total Users</div>
+                        <div class="text-muted fw-bold small text-uppercase mb-2">총 회원 수</div>
                         <div class="d-flex justify-content-between align-items-center">
                             <h2 class="fw-bold mb-0 text-dark">${userCount}명</h2>
                             <span class="fs-1 text-primary opacity-25">👥</span>
@@ -46,7 +59,7 @@
             <div class="col-md-4">
                 <div class="card stat-card h-100 border-start border-4 border-success">
                     <div class="card-body p-4">
-                        <div class="text-muted fw-bold small text-uppercase mb-2">Solved Cases</div>
+                        <div class="text-muted fw-bold small text-uppercase mb-2">해결 완료된 건</div>
                         <div class="d-flex justify-content-between align-items-center">
                             <h2 class="fw-bold mb-0 text-success">${solvedCount}건</h2>
                             <span class="fs-1 text-success opacity-25">🎉</span>
@@ -57,7 +70,7 @@
             <div class="col-md-4">
                 <div class="card stat-card h-100 border-start border-4 border-warning">
                     <div class="card-body p-4">
-                        <div class="text-muted fw-bold small text-uppercase mb-2">Long Term Unclaimed</div>
+                        <div class="text-muted fw-bold small text-uppercase mb-2">장기 미수령 분실물</div>
                         <div class="d-flex justify-content-between align-items-center">
                             <h2 class="fw-bold mb-0 text-warning">${longTermItems.size()}건</h2>
                             <span class="fs-1 text-warning opacity-25">⚠️</span>
@@ -67,7 +80,7 @@
             </div>
         </div>
 
-        <div class="card border-0 shadow-sm rounded-4">
+        <div class="card border-0 shadow-sm rounded-4 bg-white">
             <div class="card-header bg-white border-bottom-0 pt-4 px-4">
                 <ul class="nav nav-tabs card-header-tabs" id="adminTab" role="tablist">
                     <li class="nav-item">
@@ -157,7 +170,8 @@
                                             <td>
                                                 <span class="badge ${u.role == 'ADMIN' ? 'bg-danger' : 'bg-success'} rounded-pill">${u.role}</span>
                                             </td>
-                                            <td>-</td> <td>
+                                            <td>-</td> 
+                                            <td>
                                                 <c:if test="${u.role != 'ADMIN'}">
                                                     <a href="/admin/user/delete/${u.id}" class="btn btn-dark btn-sm px-3" onclick="return confirm('회원을 강제 탈퇴시킵니까?')">추방</a>
                                                 </c:if>

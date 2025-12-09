@@ -4,7 +4,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>상세보기 - FindIt</title>
+    <title>상세보기 - FindIT</title>
+    <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; }

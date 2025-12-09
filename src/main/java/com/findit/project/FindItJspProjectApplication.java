@@ -21,12 +21,12 @@ public class FindItJspProjectApplication {
 			if (userRepository.findByLoginId("admin").isEmpty()) {
 				User admin = new User();
 				admin.setLoginId("admin");
-				admin.setPassword("qwer1234!@#$");
+				admin.setPassword("1234");
 				admin.setName("관리자");
 				admin.setPhone("010-0000-0000");
 				admin.setRole("ADMIN"); //권한을 ADMIN으로 설정
 				userRepository.save(admin);
-				System.out.println("✅ 관리자 계정 생성 완료 (ID: admin / PW: qwer1234!@#$)");
+				System.out.println("✅ 관리자 계정 생성 완료 (ID: admin / PW: 1234");
 			}
 		};
 	}

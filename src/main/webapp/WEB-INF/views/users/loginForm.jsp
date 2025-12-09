@@ -4,24 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>로그인 - FindIt</title>
+    <title>로그인 - FindIT</title>
+    <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
             font-family: 'Noto Sans KR', sans-serif;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            padding: 20px;
         }
         .login-card {
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             border: none;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             padding: 40px;
             background: white;
         }
@@ -37,12 +39,13 @@
             border-color: #0d6efd;
         }
         .btn-login {
-            border-radius: 10px;
             padding: 12px;
+            border-radius: 10px;
             font-weight: bold;
             font-size: 1.1rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
+            color: white;
         }
         .btn-login:hover {
             opacity: 0.9;
@@ -53,7 +56,7 @@
 <body>
 
     <div class="login-card text-center">
-        <div class="logo">🎒</div>
+        <div class="logo mb-4"><img src="/images/FindIt_logo.png" alt="FindIt Logo" style="width: 100px; height: auto;"></div>
         <h3 class="fw-bold mb-4">로그인</h3>
         
         <form action="/users/login" method="post">

@@ -25,22 +25,24 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    private final String uploadDir = System.getProperty("user.dir") + "/uploads/";
     
     /**
      * 게시글 저장 (insert)
      */
     @Transactional
     public void insert(Post post, List<MultipartFile> imageFiles) throws IOException {
-        // 1. 게시글 저장 (Controller에서 데이터가 이미 채워져서 옴)
+        // 1. 게시글 저장
         postRepository.save(post);
         
-        // 2. 이미지 저장 로직 (유지)
+        // 2. 이미지 저장 로직
         if (imageFiles != null && !imageFiles.isEmpty()) {
+            
+            // 폴더가 없으면 자동으로 생성
             File directory = new File(uploadDir);
             if (!directory.exists()) {
-                directory.mkdirs();
+                boolean created = directory.mkdirs();
+                if(created) System.out.println("✅ uploads 폴더 생성 완료: " + uploadDir);
             }
 
             for (MultipartFile file : imageFiles) {
@@ -90,7 +92,7 @@ public class PostService {
     public void updateStatus(Long postId, String status) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다."));
-        post.setStatus(status); // JPA의 변경 감지(Dirty Checking)로 자동 저장됨
+        post.setStatus(status);
     }
     
     /**
