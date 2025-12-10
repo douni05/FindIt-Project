@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%-- [추가] URL 파라미터에서 현재 탭과 필터 값을 읽어 JSTL 변수로 설정 --%>
+<c:set var="currentTab" value="${param.tab}"/>
+<c:set var="currentFilter" value="${param.filter}"/>
+
+<%-- [추가] 장기 미수령 게시글 ID 목록을 콤마로 연결하여 필터링에 사용 --%>
+<c:set var="longTermPostIds" value=""/>
+<c:forEach var="item" items="${longTermItems}">
+    <c:set var="longTermPostIds" value="${longTermPostIds},${item.postId}"/>
+</c:forEach>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -46,7 +56,8 @@
         
         <div class="row g-4 mb-5">
             <div class="col-md-4">
-                <div class="card stat-card h-100 border-start border-4 border-primary">
+                <%-- 총 회원 수 카드: 클릭 시 회원 관리 탭으로 이동 --%>
+                <a href="/admin?tab=users" class="card stat-card h-100 border-start border-4 border-primary text-decoration-none">
                     <div class="card-body p-4">
                         <div class="text-muted fw-bold small text-uppercase mb-2">총 회원 수</div>
                         <div class="d-flex justify-content-between align-items-center">
@@ -54,10 +65,11 @@
                             <span class="fs-1 text-primary opacity-25">👥</span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="card stat-card h-100 border-start border-4 border-success">
+                <%-- 해결 완료된 건 카드: 클릭 시 게시물 관리 탭 + 완료 필터로 이동 --%>
+                <a href="/admin?tab=posts&filter=complete" class="card stat-card h-100 border-start border-4 border-success text-decoration-none">
                     <div class="card-body p-4">
                         <div class="text-muted fw-bold small text-uppercase mb-2">해결 완료된 건</div>
                         <div class="d-flex justify-content-between align-items-center">
@@ -65,10 +77,11 @@
                             <span class="fs-1 text-success opacity-25">🎉</span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-4">
-                <div class="card stat-card h-100 border-start border-4 border-warning">
+                <%-- 장기 미수령 분실물 카드: 클릭 시 게시물 관리 탭 + 장기 미수령 필터로 이동 --%>
+                <a href="/admin?tab=posts&filter=longterm" class="card stat-card h-100 border-start border-4 border-warning text-decoration-none">
                     <div class="card-body p-4">
                         <div class="text-muted fw-bold small text-uppercase mb-2">장기 미수령 분실물</div>
                         <div class="d-flex justify-content-between align-items-center">
@@ -76,7 +89,7 @@
                             <span class="fs-1 text-warning opacity-25">⚠️</span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
 
@@ -84,13 +97,16 @@
             <div class="card-header bg-white border-bottom-0 pt-4 px-4">
                 <ul class="nav nav-tabs card-header-tabs" id="adminTab" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#notice">📢 공지사항 관리</button>
+                        <%-- 탭 활성화 로직 적용: 기본 탭이거나 currentTab이 notice일 경우 active --%>
+                        <button class="nav-link ${(empty currentTab || currentTab eq 'notice') ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#notice">📢 공지사항 관리</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#posts">📝 게시물 관리</button>
+                        <%-- 탭 활성화 로직 적용: currentTab이 posts일 경우 active --%>
+                        <button class="nav-link ${currentTab eq 'posts' ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#posts">📝 게시물 관리</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#users">👥 회원 관리</button>
+                        <%-- 탭 활성화 로직 적용: currentTab이 users일 경우 active --%>
+                        <button class="nav-link ${currentTab eq 'users' ? 'active' : ''}" data-bs-toggle="tab" data-bs-target="#users">👥 회원 관리</button>
                     </li>
                 </ul>
             </div>
@@ -98,7 +114,8 @@
             <div class="card-body p-4">
                 <div class="tab-content">
                     
-                    <div class="tab-pane fade show active" id="notice">
+                    <%-- 탭 컨텐츠 활성화 로직 적용 --%>
+                    <div class="tab-pane fade ${(empty currentTab || currentTab eq 'notice') ? 'show active' : ''}" id="notice">
                         <div class="row">
                             <div class="col-md-4 border-end">
                                 <h5 class="fw-bold mb-3">새 공지 등록</h5>
@@ -131,7 +148,8 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="posts">
+                    <%-- 탭 컨텐츠 활성화 로직 적용 --%>
+                    <div class="tab-pane fade ${currentTab eq 'posts' ? 'show active' : ''}" id="posts">
                         <div class="table-responsive">
                             <table class="table table-hover table-custom text-center">
                                 <thead class="table-light">
@@ -139,23 +157,37 @@
                                 </thead>
                                 <tbody>
                                     <c:forEach var="p" items="${posts}">
-                                        <tr>
-                                            <td>${p.postId}</td>
-                                            <td><span class="badge ${p.status=='PROCEEDING'?'bg-primary':'bg-secondary'}">${p.status}</span></td>
-                                            <td class="text-start"><a href="/posts/detail/${p.postId}" target="_blank" class="text-decoration-none text-dark fw-bold">${p.title}</a></td>
-                                            <td>${p.user.name}</td>
-                                            <td>${p.createdAt.toString().substring(0,10)}</td>
-                                            <td>
-                                                <a href="/admin/post/delete/${p.postId}" class="btn btn-outline-danger btn-sm" onclick="return confirm('정말 삭제합니까? 복구할 수 없습니다.')">삭제</a>
-                                            </td>
-                                        </tr>
+                                        <%-- 게시물 필터링 로직 --%>
+                                        <c:set var="showPost" value="${empty currentFilter}"/>
+                                        <c:if test="${currentFilter eq 'complete'}">
+                                            <c:set var="showPost" value="${p.status eq 'COMPLETE'}"/>
+                                        </c:if>
+                                        <c:if test="${currentFilter eq 'longterm'}">
+                                            <%-- 장기 미수령 아이템은 longTermPostIds에 Post ID가 포함되어 있는지 확인 --%>
+                                            <c:set var="postIdString" value=",${p.postId}"/>
+                                            <c:set var="showPost" value="${longTermPostIds.contains(postIdString)}"/>
+                                        </c:if>
+
+                                        <c:if test="${showPost}">
+                                            <tr>
+                                                <td>${p.postId}</td>
+                                                <td><span class="badge ${p.status=='PROCEEDING'?'bg-primary':'bg-secondary'}">${p.status}</span></td>
+                                                <td class="text-start"><a href="/posts/detail/${p.postId}" target="_blank" class="text-decoration-none text-dark fw-bold">${p.title}</a></td>
+                                                <td>${p.user.name}</td>
+                                                <td>${p.createdAt.toString().substring(0,10)}</td>
+                                                <td>
+                                                    <a href="/admin/post/delete/${p.postId}" class="btn btn-outline-danger btn-sm" onclick="return confirm('정말 삭제합니까? 복구할 수 없습니다.')">삭제</a>
+                                                </td>
+                                            </tr>
+                                        </c:if>
                                     </c:forEach>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="users">
+                    <%-- 탭 컨텐츠 활성화 로직 적용 --%>
+                    <div class="tab-pane fade ${currentTab eq 'users' ? 'show active' : ''}" id="users">
                         <div class="table-responsive">
                             <table class="table table-hover table-custom text-center">
                                 <thead class="table-light">
