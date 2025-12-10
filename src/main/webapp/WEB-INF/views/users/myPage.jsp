@@ -105,7 +105,7 @@
                                                 </a>
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
-                                                <small class="text-muted d-none d-md-block">${p.createdAt.toString().substring(0, 10)}</small>
+                                                <small class="text-muted d-none d-md-block">${p.lostDate.toString().substring(0, 10)}</small>
                                                 <span class="badge ${p.status == 'PROCEEDING' ? 'bg-light text-primary' : 'bg-secondary'} border status-badge">
                                                     ${p.status == 'PROCEEDING' ? '보관중' : '완료'}
                                                 </span>

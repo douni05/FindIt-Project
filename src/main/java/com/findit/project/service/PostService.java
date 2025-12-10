@@ -103,27 +103,21 @@ public class PostService {
      * @return 필터링된 게시글 목록
      */
     public List<Post> searchAndFilter(String keyword, String type, String category) {	
-        // 검색어와 필터가 없는 경우 (전체 조회)
-        if (keyword.isEmpty() && type.equals("ALL") && category.equals("ALL")) {
-            return postRepository.findAllByOrderByCreatedAtDesc();
-        }
-
-        // 1. 키워드 처리 (키워드가 없으면 빈 문자열로 대체하여 검색에 영향 X)
+        
+    	// 1. 키워드 처리: 검색어 (Controller에서 ""로 옴)
         String finalKeyword = keyword.isEmpty() ? "" : keyword;
 
-        // 2. 유형 처리 (ALL이면 빈 문자열로 대체하여 검색에 영향 X)
+        // 2. 유형 처리: "ALL"이면 빈 문자열로 처리하여 JPQL에서 조건 무시
         String finalType = type.equals("ALL") ? "" : type;
 
-        // 3. 카테고리 처리 (ALL이면 빈 문자열로 대체하여 검색에 영향 X)
+        // 3. 카테고리 처리: "ALL"이면 빈 문자열로 처리하여 JPQL에서 조건 무시
         String finalCategory = category.equals("ALL") ? "" : category;
 
-        // JPA Query Method 호출 (OR 조건으로 키워드를 검색하고, AND 조건으로 Type/Category 필터링)
-        return postRepository.findByTitleContainingOrContentContainingOrBuildingContainingAndTypeContainingAndCategoryContainingOrderByCreatedAtDesc(
-            finalKeyword,   // Title 검색
-            finalKeyword,   // Content 검색
-            finalKeyword,   // Building 검색
-            finalType,      // Type 필터
-            finalCategory   // Category 필터
+        // JPQL @Query를 사용하는 새로운 repository 메서드 호출
+        return postRepository.searchAndFilter(
+            finalKeyword,
+            finalType,      
+            finalCategory   
         );
     }
 }

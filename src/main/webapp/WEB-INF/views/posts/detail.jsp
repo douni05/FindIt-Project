@@ -79,7 +79,7 @@
                         <p><span class="info-label">카테고리</span> ${post.category}</p>
                         <p><span class="info-label">습득 장소</span> ${post.building} ${post.placeDetail}</p>
                         <p><span class="info-label">작성자</span> ${post.user.name}</p>
-                        <p><span class="info-label">등록일</span> ${post.createdAt.toString().substring(0, 10)}</p>
+                        <p><span class="info-label">등록일</span> ${post.lostDate.toString().substring(0, 10)}</p>
                     </div>
 
                     <div class="p-3 bg-light rounded mb-4">
@@ -97,7 +97,7 @@
                         <div class="list-group-item bg-transparent px-0">
                             <div class="d-flex justify-content-between">
                                 <strong>${comment.user.name}</strong>
-                                <small class="text-muted">${comment.createdAt.toString().substring(0, 16)}</small>
+                                <small class="text-muted">${comment.lostDate.toString().substring(0, 16)}</small>
                             </div>
                             <div class="mt-1">
                                 <c:choose>

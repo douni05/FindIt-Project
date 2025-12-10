@@ -1,6 +1,8 @@
 package com.findit.project.controller;
 
 import com.findit.project.domain.User;
+import com.findit.project.domain.Notice;
+import com.findit.project.repository.NoticeRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +19,10 @@ import com.findit.project.domain.Post;
 @RequiredArgsConstructor
 public class HomeController {
 	private final PostService postService;
+	private final NoticeRepository noticeRepository;
 	
     @GetMapping("/")
     public String home(HttpServletRequest request, Model model) {
-        // 세션에서 로그인한 사용자 정보 꺼내기
         HttpSession session = request.getSession(false);
         
         if (session != null) {
@@ -31,11 +33,17 @@ public class HomeController {
         }
         
         List<Post> recentPosts = postService.selectAll(); // selectAll()은 최신순 정렬이 되어 있음
-        // 목록이 너무 길면 성능 이슈가 있으므로 5개만 자릅니다.
+        
         if (recentPosts.size() > 5) {
             recentPosts = recentPosts.subList(0, 5);
         }
-        model.addAttribute("recentPosts", recentPosts); // 화면에 데이터 전달
+        model.addAttribute("recentPosts", recentPosts);
+        
+        List<Notice> notices = noticeRepository.findAllByOrderByCreatedAtDesc();
+        if (notices.size() > 3) {
+            notices = notices.subList(0, 3);
+        }
+        model.addAttribute("notices", notices);
         
         return "home";
     }

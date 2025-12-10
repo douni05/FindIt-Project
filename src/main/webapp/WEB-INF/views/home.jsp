@@ -168,9 +168,18 @@
                 <div class="p-4 bg-white rounded-4 shadow-sm h-100">
                     <h5 class="fw-bold mb-3">📢 공지사항</h5>
                     <ul class="list-unstyled text-muted small">
-                        <li class="mb-2">• 습득물 보관 기간은 최대 3개월입니다.</li>
-                        <li class="mb-2">• 고가의 물품은 학생지원팀에 직접 방문하여 수령하세요.</li>
-                        <li>• 허위 신고 시 이용이 제한될 수 있습니다.</li>
+                        <c:choose>
+                            <c:when test="${not empty notices}">
+                                <c:forEach var="notice" items="${notices}">
+                                    <li class="mb-2 text-dark">
+                                        <span class="fw-bold me-1 text-primary">[공지]</span> ${notice.title}
+                                    </li>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="text-muted">등록된 공지사항이 없습니다.</li>
+                            </c:otherwise>
+                        </c:choose>
                     </ul>
                 </div>
             </div>

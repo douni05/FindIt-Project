@@ -52,6 +52,7 @@
                     <button type="submit" class="btn btn-dark btn-sm me-2">검색</button>
                     <a href="/posts/list" class="btn btn-light btn-sm border">초기화</a>
                 </div>
+                <input type="hidden" name="type" value="${currentType}">
             </div>
         </form>
         
@@ -109,7 +110,7 @@
                                 <td>${post.building}</td>
                                 <td>${post.user.name}</td>
                                 <td class="text-muted small">
-                                    ${post.createdAt.toString().substring(0, 10)}
+                                    ${post.lostDate.toString().substring(0, 10)}
                                 </td>
                             </tr>
                         </c:forEach>

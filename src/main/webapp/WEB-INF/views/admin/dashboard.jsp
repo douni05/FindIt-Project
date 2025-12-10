@@ -1,10 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<%-- [추가] URL 파라미터에서 현재 탭과 필터 값을 읽어 JSTL 변수로 설정 --%>
 <c:set var="currentTab" value="${param.tab}"/>
 <c:set var="currentFilter" value="${param.filter}"/>
-
-<%-- [추가] 장기 미수령 게시글 ID 목록을 콤마로 연결하여 필터링에 사용 --%>
 <c:set var="longTermPostIds" value=""/>
 <c:forEach var="item" items="${longTermItems}">
     <c:set var="longTermPostIds" value="${longTermPostIds},${item.postId}"/>
@@ -174,7 +171,7 @@
                                                 <td><span class="badge ${p.status=='PROCEEDING'?'bg-primary':'bg-secondary'}">${p.status}</span></td>
                                                 <td class="text-start"><a href="/posts/detail/${p.postId}" target="_blank" class="text-decoration-none text-dark fw-bold">${p.title}</a></td>
                                                 <td>${p.user.name}</td>
-                                                <td>${p.createdAt.toString().substring(0,10)}</td>
+                                                <td>${p.lostDate.toString().substring(0,10)}</td>
                                                 <td>
                                                     <a href="/admin/post/delete/${p.postId}" class="btn btn-outline-danger btn-sm" onclick="return confirm('정말 삭제합니까? 복구할 수 없습니다.')">삭제</a>
                                                 </td>
