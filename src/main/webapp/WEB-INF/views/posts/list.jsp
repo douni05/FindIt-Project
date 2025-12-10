@@ -8,7 +8,11 @@
     <link rel="icon" type="image/png" href="/images/FindIt_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; font-family: 'Noto Sans KR', sans-serif; }
+        body { background-color: #f8f9fa; font-family: 'Noto Sans KR', sans-serif; padding-top: 100px; }
+        .navbar { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 10px 0 !important; }
+        .navbar-brand { padding: 0 !important; }
+        .navbar-logo { height: 30px; margin-right: 8px; }
+        .nav-btn { border-radius: 20px; font-weight: 500; padding: 8px 20px; }
         .table-custom th { background-color: #f1f3f5; font-weight: 600; }
         .table-custom td { vertical-align: middle; }
         .status-badge { font-size: 0.8rem; padding: 5px 10px; border-radius: 20px; }
@@ -19,11 +23,34 @@
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+	<nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/FindIt_logo.png" alt="FindIt Logo" class="navbar-logo">
+                <span class="fw-bold text-primary">FindIT</span>
+            </a>
+            
+            <div class="d-flex gap-2">
+                <c:if test="${empty loginUser}">
+                    <a href="/users/loginForm" class="btn btn-outline-primary nav-btn">로그인</a>
+                    <a href="/users/insertForm" class="btn btn-primary nav-btn text-white">회원가입</a>
+                </c:if>
+
+                <c:if test="${not empty loginUser}">
+                    <c:if test="${loginUser.role == 'ADMIN'}">
+                        <a href="/admin" class="btn btn-danger nav-btn btn-sm">👑 관리자</a>
+                    </c:if>
+                    <a href="/users/myPage" class="btn btn-light nav-btn border">👤 마이페이지</a>
+                    <a href="/users/logout" class="btn btn-outline-danger nav-btn">로그아웃</a>
+                </c:if>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4"> 
             <h2 class="fw-bold">📋 분실물 게시판</h2>
             <div>
-                <a href="/" class="btn btn-outline-secondary me-2">🏠 홈으로</a>
                 <a href="/posts/insertForm" class="btn btn-primary">✏️ 글쓰기</a>
             </div>
         </div>

@@ -28,14 +28,11 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final PostImageRepository postImageRepository;
-    private final CommentRepository commentRepository;
-    
-    // [중요 수정 1] 여기에 있던 private RedirectAttributes ... 코드는 삭제했습니다! (여기 있으면 안 됨)
+    private final CommentRepository commentRepository;   
 
     // 1. 게시글 목록 조회 및 검색
 	@GetMapping("/list")
-    public String list(Model model, 
-                       // [중요 수정 2] value="..." 로 이름을 명확하게 지정 (에러 방지)
+    public String list(Model model,                     
                        @RequestParam(value = "keyword", defaultValue = "") String keyword,
                        @RequestParam(value = "type", defaultValue = "ALL") String type,
                        @RequestParam(value = "category", defaultValue = "ALL") String category) {
@@ -52,7 +49,6 @@ public class PostController {
 
     // 2. 글쓰기 폼 이동
     @GetMapping("/insertForm")
-    // [중요 수정 3] RedirectAttributes를 파라미터로 받음
     public String insertForm(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loginUser") == null) {

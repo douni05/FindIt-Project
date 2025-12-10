@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Bean;
 import com.findit.project.domain.User;
 import com.findit.project.domain.Notice;
 import com.findit.project.domain.Post;
+import com.findit.project.domain.PostImage;
 import com.findit.project.repository.UserRepository;
 import com.findit.project.repository.NoticeRepository;
+import com.findit.project.repository.PostImageRepository;
 import com.findit.project.repository.PostRepository;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -22,7 +24,7 @@ public class FindItJspProjectApplication {
 	}
 	
 	@Bean
-	public CommandLineRunner initAdmin(UserRepository userRepository, PostRepository postRepository, NoticeRepository noticeRepository) {
+	public CommandLineRunner initAdmin(UserRepository userRepository, PostRepository postRepository, NoticeRepository noticeRepository, PostImageRepository postImageRepository) {
 		return args -> {
 			// 1. 관리자 계정 생성
 			User admin = null;
@@ -60,15 +62,16 @@ public class FindItJspProjectApplication {
 				// 3-1. 장기 미수령 분실물 (Long-term, PROCEEDING, LostDate: 3개월 이전)
 				Post longTermLost = new Post();
 				longTermLost.setUser(testUser);
-				longTermLost.setTitle("지갑찾아주세요.");
-				longTermLost.setContent("작년 9월 초에 잃어버린 지갑입니다. 본관에서 분실했습니다. 검은색 가죽입니다.");
+				longTermLost.setTitle("지갑 찾아주세요.");
+				longTermLost.setContent("본관에서 분실했습니다. 검은색 가죽입니다.");
 				longTermLost.setType("LOST");
 				longTermLost.setCategory("지갑/카드");
-				longTermLost.setBuilding("제1공학관");
-				longTermLost.setPlaceDetail("101호 강의실");
+				longTermLost.setBuilding("4호관");
+				longTermLost.setPlaceDetail("403호 강의실");
 				longTermLost.setStatus("PROCEEDING");
 				longTermLost.setLostDate(LocalDateTime.of(2025, Month.SEPTEMBER, 1, 10, 0)); 
 				postRepository.save(longTermLost);
+				savePostImage(postImageRepository, longTermLost, "test-wallet.jpg", "uuid_test_wallet.jpg");
 
 				// 3-2. 해결 완료된 습득물 (COMPLETE, Found)
 				Post foundComplete = new Post();
@@ -82,6 +85,7 @@ public class FindItJspProjectApplication {
 				foundComplete.setStatus("COMPLETE");
 				foundComplete.setLostDate(LocalDateTime.now().minusDays(10));
 				postRepository.save(foundComplete);
+				savePostImage(postImageRepository, foundComplete, "test-airpods.jpg", "uuid_test_airpods.jpg");
 
 				// 3-3. 일반 진행중 분실물 (PROCEEDING, Lost)
 				Post recentLost = new Post();
@@ -95,6 +99,7 @@ public class FindItJspProjectApplication {
 				recentLost.setStatus("PROCEEDING");
 				recentLost.setLostDate(LocalDateTime.now().minusDays(1));
 				postRepository.save(recentLost);
+				savePostImage(postImageRepository, recentLost, "test-book.jpg", "uuid_test_book.jpg");
 				
 			}
 			
@@ -113,5 +118,12 @@ public class FindItJspProjectApplication {
             }
 		};
 	}
-
+	private void savePostImage(PostImageRepository repo, Post post, String orgName, String saveName) {
+        PostImage image = new PostImage();
+        image.setPost(post);
+        image.setOrgName(orgName);
+        image.setSaveName(saveName);
+        image.setFilePath(System.getProperty("user.dir") + "/uploads/" + saveName);
+        repo.save(image);
+    }
 }

@@ -53,38 +53,19 @@
                 <span class="fw-bold text-primary">FindIT</span>
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center gap-2">
-                    <c:if test="${empty user}">
-                        <li class="nav-item">
-                            <a href="/users/loginForm" class="btn btn-outline-primary nav-btn">로그인</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/users/insertForm" class="btn btn-primary nav-btn text-white">회원가입</a>
-                        </li>
-                    </c:if>
+            <div class="d-flex gap-2">
+                <c:if test="${empty loginUser}">
+                    <a href="/users/loginForm" class="btn btn-outline-primary nav-btn">로그인</a>
+                    <a href="/users/insertForm" class="btn btn-primary nav-btn text-white">회원가입</a>
+                </c:if>
 
-                    <c:if test="${not empty user}">
-                        <li class="nav-item me-3 text-muted">
-                            반갑습니다, <strong>${user.name}</strong>님!
-                        </li>
-                        <c:if test="${user.role == 'ADMIN'}">
-                            <li class="nav-item">
-                                <a href="/admin" class="btn btn-danger nav-btn btn-sm">👑 관리자</a>
-                            </li>
-                        </c:if>
-                        <li class="nav-item">
-                            <a href="/users/myPage" class="btn btn-light nav-btn border">👤 마이페이지</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/users/logout" class="btn btn-outline-danger nav-btn">로그아웃</a>
-                        </li>
+                <c:if test="${not empty loginUser}">
+                    <c:if test="${loginUser.role == 'ADMIN'}">
+                        <a href="/admin" class="btn btn-danger nav-btn btn-sm">👑 관리자</a>
                     </c:if>
-                </ul>
+                    <a href="/users/myPage" class="btn btn-light nav-btn border">👤 마이페이지</a>
+                    <a href="/users/logout" class="btn btn-outline-danger nav-btn">로그아웃</a>
+                </c:if>
             </div>
         </div>
     </nav>
@@ -181,6 +162,9 @@
                             </c:otherwise>
                         </c:choose>
                     </ul>
+                    <div class="text-end pt-3">
+                         <a href="/notices/list" class="text-decoration-none fw-bold small">전체 공지사항 보기 ></a>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">

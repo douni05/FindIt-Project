@@ -66,17 +66,17 @@ public class AdminController {
                               @RequestParam("content") String content, 
                               HttpServletRequest request) {
         
-        if (!isAdmin(request)) return "redirect:/"; //
+        if (!isAdmin(request)) return "redirect:/";
         
         Notice notice = new Notice();
         notice.setTitle(title);
         notice.setContent(content);
-        noticeRepository.save(notice); // 저장
+        noticeRepository.save(notice);
         
         return "redirect:/admin"; // 다시 관리자 페이지로
     }
 
-    // 3. 게시글 강제 삭제 [수정됨 - @PathVariable 이름 명시]
+    // 3. 게시글 강제 삭제
     @GetMapping("/post/delete/{id}")
     public String deletePost(@PathVariable("id") Long id, HttpServletRequest request) {
         if (!isAdmin(request)) return "redirect:/";
@@ -84,7 +84,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    // 4. 회원 강제 탈퇴 [수정됨 - @PathVariable 이름 명시]
+    // 4. 회원 강제 탈퇴
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id, HttpServletRequest request) {
         if (!isAdmin(request)) return "redirect:/";
