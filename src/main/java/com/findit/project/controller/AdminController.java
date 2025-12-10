@@ -33,7 +33,9 @@ public class AdminController {
 
     // 1. 관리자 대시보드
     @GetMapping
-    public String dashboard(Model model, HttpServletRequest request) {
+    public String dashboard(Model model, 
+                            HttpServletRequest request,
+                            @RequestParam(value = "noticeId", required = false) Long noticeId) { 
         if (!isAdmin(request)) return "redirect:/";
 
         long userCount = userRepository.count();
@@ -52,6 +54,15 @@ public class AdminController {
         model.addAttribute("posts", postRepository.findAllByOrderByCreatedAtDesc());
         model.addAttribute("notices", noticeRepository.findAllByOrderByCreatedAtDesc());
         
+        if (noticeId != null) {
+            noticeRepository.findById(noticeId).ifPresent(noticeToEdit -> {
+                model.addAttribute("editNotice", noticeToEdit);
+                model.addAttribute("isEditMode", true);
+            });
+        } else {
+             model.addAttribute("isEditMode", false);
+        }
+        
         model.addAttribute("userCount", userCount);
         model.addAttribute("postCount", postCount);
         model.addAttribute("solvedCount", solvedCount);
@@ -60,20 +71,37 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    // 2. 공지사항 등록
-    @PostMapping("/notice/write")
-    public String writeNotice(@RequestParam("title") String title, 
+    // 2. 공지사항 등록/수정/삭제
+    @PostMapping("/notice/process") 
+    public String processNotice(@RequestParam(value = "id", required = false) Long id, 
+                              @RequestParam("title") String title, 
                               @RequestParam("content") String content, 
                               HttpServletRequest request) {
         
         if (!isAdmin(request)) return "redirect:/";
-        
-        Notice notice = new Notice();
+
+        Notice notice;
+        if (id == null) {
+            // 등록 (ID가 없음)
+            notice = new Notice();
+        } else {
+            // 수정 (ID가 있음)
+            notice = noticeRepository.findById(id)
+                     .orElseThrow(() -> new IllegalArgumentException("Invalid notice Id:" + id));
+        }
+
         notice.setTitle(title);
         notice.setContent(content);
         noticeRepository.save(notice);
         
-        return "redirect:/admin"; // 다시 관리자 페이지로
+        return "redirect:/admin?tab=notice";
+    }
+    
+    @PostMapping("/notice/delete/{id}")
+    public String deleteNotice(@PathVariable("id") Long id, HttpServletRequest request) {
+        if (!isAdmin(request)) return "redirect:/";
+        noticeRepository.deleteById(id);
+        return "redirect:/admin?tab=notice";
     }
 
     // 3. 게시글 강제 삭제
